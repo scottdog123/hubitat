@@ -7,7 +7,7 @@ definition(
     name: "DoorTriggeredLightsSunsetChild",
     namespace: "scottdog123",
     author: "Curt Scott",
-    parent: "scottdog123:DoorTriggeredLightsSunsetParent",
+    parent: "scottdog123:Door Triggered Lights Sunset",
     description: "Turns on lights when door opens after sunset for x minutes",
     category: "My Apps",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/ModeMagic/rise-and-shine.png",
@@ -38,32 +38,32 @@ def initialize() {
   subscribe(doorSensor, "contact.open", motionOrDoorEvent)
   //subscribe(motionSensor, "motion.active", motionOrDoorEvent)
   subscribe(motionSensor, "switch.on", motionOrDoorEvent)
-  subscribe(location, "sunriseTime", sunRiseHandler)
-  subscribe(location, "sunsetTime", sunSetHandler)
+  subscribe(location, "sunrise", sunRiseHandler)
+  subscribe(location, "sunset", sunSetHandler)
   def SunriseAndSunset = getSunriseAndSunset()
-  if (now() >= SunriseAndSunset.sunrise.time && now() < SunriseAndSunset.sunset.time) {
+  if ((now() >= SunriseAndSunset.sunrise.time) && (now() < SunriseAndSunset.sunset.time)) {
     state.nightTime = 0
-    //log.debug "start daymode"
+    log.debug "start daymode"
   }
   else {
     state.nightTime = 1
-    //log.debug "start nightmode"
+    log.debug "start nightmode"
   }
 }
 
 def lightOffHandler() {
-  //log.debug "turning off lights"
+  log.debug "turning off lights"
   switches.off()
 }
 
 def motionOrDoorEvent(evt) {
   if (disable_switch && disable_switch.currentValue("switch") == "on") {
-    //log.debug "disable_switch on"
+    log.debug "disable_switch on"
     return
   }
   if (state.nightTime == 1) {
     switches.on()
-    //log.debug "door open"
+    log.debug "door open"
     // sendPush("Door open: ${evt.name}")
     runIn((Delay * 60), lightOffHandler, [overwrite: true])
   }
@@ -71,10 +71,11 @@ def motionOrDoorEvent(evt) {
 
 def sunRiseHandler(evt) {
   state.nightTime = 0
-  //log.debug "Day Time"
+  log.debug "Day Time"
 }
 
 def sunSetHandler(evt) {
   state.nightTime = 1
-  //log.debug "Night Time"
+  log.debug "Night Time"
 }
+

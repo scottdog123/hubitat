@@ -1,5 +1,5 @@
 definition(
-  name: "DoorTriggeredLightsSunsetParent",
+  name: "Door Triggered Lights Sunset",
   namespace: "scottdog123",
   author: "Curt Scott",
   description: "Turns on lights when door opens after sunset for x minutes - parent",
